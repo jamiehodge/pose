@@ -1,7 +1,10 @@
-ENV['RACK_ENV'] ||= 'development'
+ENV['RACK_ENV']    ||= 'development'
+ENV['REPOSE_REPO'] ||= 'repo'
 
 require 'bundler/setup'
-Bundler.require
+Bundler.require :default, ENV['RACK_ENV'].intern
+
+FileUtils.mkdir_p ENV['REPOSE_REPO'] 
 
 DB = Sequel.sqlite
 DB.instance_eval do
@@ -28,5 +31,10 @@ end
 
 Sequel::Model.plugin :json_serializer
 
-require_relative 'models'
-require_relative 'app'
+require_relative 'lib/storable'
+
+require_relative 'models/asset'
+require_relative 'models/proxy'
+
+require_relative 'controllers/assets'
+require_relative 'controllers/proxies'

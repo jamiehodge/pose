@@ -1,6 +1,6 @@
 require 'stringio'
 
-class App < Sinatra::Base
+class Assets < Sinatra::Base
   
   use Rack::Parser, content_types: {
     'application/octet-stream' => Proc.new { |body| { file: { tempfile: StringIO.new(body) } } }

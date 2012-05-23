@@ -1,21 +1,3 @@
-class Asset < Sequel::Model  
-  one_to_many :proxies
-  
-  def dir
-    File.join 'repo', id.to_s
-  end
-  
-end
-
-class Proxy < Sequel::Model
-  many_to_one :asset
-  
-  def dir
-    File.join 'repo', asset_id.to_s
-  end
-  
-end
-
 module Storable
   
   attr_reader :tempfile
@@ -58,6 +40,3 @@ module Storable
     end
   end
 end
-
-Asset.include Storable
-Proxy.include Storable

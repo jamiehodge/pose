@@ -1,5 +1,5 @@
 require './env'
 
 map '/' do
-  run App
+  run Assets
 end

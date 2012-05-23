@@ -1,9 +1,9 @@
 require_relative 'spec_helper'
 
-describe App do
+describe Assets do
   
   def app
-    App
+    Assets
   end
   
   def parsed_response

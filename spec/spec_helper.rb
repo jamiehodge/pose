@@ -1,11 +1,10 @@
-ENV['RACK_ENV'] ||= 'development'
+ENV['RACK_ENV'] = 'test'
 
 require_relative '../env'
 
-Bundler.require :test
-
 require 'minitest/autorun'
 require 'minitest/spec'
+require 'minitest/pride'
 
 class MiniTest::Spec
   include Rack::Test::Methods

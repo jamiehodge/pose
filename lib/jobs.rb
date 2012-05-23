@@ -4,7 +4,7 @@ require 'sequel'
 require 'sqlite3'
 require 'tempfile'
 
-require_relative 'env'
+require_relative '../env'
 
 include Stalker
 

@@ -7,12 +7,14 @@ gem 'yajl-ruby', require: 'yajl'
 gem 'sequel'
 gem 'sqlite3'
 
-# gem 'stalker'
+gem 'stalker'
+gem 'foreman'
 
 group :development do
   gem 'guard', github: 'guard', branch: 'listen'
   gem 'listen'
   
+  gem 'guard-bundler'
   gem 'guard-minitest'
 end
 

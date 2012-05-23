@@ -1,0 +1,65 @@
+GIT
+  remote: git://github.com/brynary/rack-test.git
+  revision: cab8eb929b45d9e32474fad1b6806c2ab8f6bea8
+  specs:
+    rack-test (0.6.1)
+      rack (>= 1.0)
+
+GIT
+  remote: git://github.com/guard/guard.git
+  revision: 066c54ba0ecf22c5d29b44882b94cce9c2cd2ced
+  branch: listen
+  specs:
+    guard (1.1.0.beta)
+      listen (>= 0.4.2)
+      thor (>= 0.14.6)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    fabrication (1.4.0)
+    ffi (1.0.11)
+    guard-minitest (0.5.0)
+      guard (>= 0.4)
+    listen (0.4.2)
+      rb-fchange (~> 0.0.5)
+      rb-fsevent (~> 0.9.1)
+      rb-inotify (~> 0.8.8)
+    multi_json (1.3.5)
+    multi_xml (0.4.4)
+    rack (1.4.1)
+    rack-parser (0.1.2)
+      multi_json
+      multi_xml
+      rack
+    rack-protection (1.2.0)
+      rack
+    rb-fchange (0.0.5)
+      ffi
+    rb-fsevent (0.9.1)
+    rb-inotify (0.8.8)
+      ffi (>= 0.5.0)
+    sequel (3.35.0)
+    sinatra (1.3.2)
+      rack (~> 1.3, >= 1.3.6)
+      rack-protection (~> 1.2)
+      tilt (~> 1.3, >= 1.3.3)
+    sqlite3 (1.3.6)
+    thor (0.15.2)
+    tilt (1.3.3)
+    yajl-ruby (1.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fabrication
+  guard!
+  guard-minitest
+  listen
+  rack-parser
+  rack-test!
+  sequel
+  sinatra
+  sqlite3
+  yajl-ruby

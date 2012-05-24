@@ -59,14 +59,14 @@ describe Assets do
   
   describe 'POST /' do
     
+    after do
+      Asset.destroy
+    end
+    
     describe 'with tempfile' do
       
       before do
         post '/', file: file
-      end
-      
-      after do
-        Asset.destroy
       end
       
       it 'creates asset' do
@@ -88,10 +88,6 @@ describe Assets do
       before do
         @attrs = { filename: 'foo.txt', type: 'text/plain', size: 321 }
         post '/', file: @attrs
-      end
-      
-      after do
-        Asset.destroy
       end
       
       it 'creates asset' do

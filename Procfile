@@ -1,4 +1,2 @@
-web: bundle exec rackup
-beanstalk: beanstalkd
-worker: bundle exec stalk lib/jobs.rb
+web: bundle exec rackup -p 9293
 guard: bundle exec guard

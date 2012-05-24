@@ -1,11 +1,7 @@
 require 'stringio'
+require 'net/http'
 
-class Assets < Sinatra::Base
-  
-  use Rack::Parser, content_types: {
-    'application/octet-stream' => Proc.new { |body| { file: { tempfile: StringIO.new(body) } } }
-  }
-  use Rack::MethodOverride
+class Assets < Base
   
   get '/' do
     Asset.to_json root: true
@@ -19,11 +15,24 @@ class Assets < Sinatra::Base
     headers \
       'Location' => url("/#{@asset.id}")
       
+    if @asset.complete?
+      uri = URI 'http://localhost:9292'
+      res = Net::HTTP.post_form uri, 
+        source: url("/#{@asset.id}/media"), 
+        destination: url("/proxies", true, false), 
+        format: 'webm',
+        asset_id: @asset.id
+    end
+      
     @asset.to_json root: true, include: { size: {}, proxies: { naked: true } }
   end
   
   before %r{^/(?<id>\d+)} do
     @asset = Asset[ params[:id] ] || not_found
+  end
+  
+  get '/:id/media' do
+    send_file @asset.path, type: @asset.type
   end
   
   get '/:id' do
@@ -42,21 +51,5 @@ class Assets < Sinatra::Base
   delete '/:id' do
     @asset.destroy
     201
-  end
-  
-  error Sequel::ValidationFailed, Sequel::HookFailed do
-    400
-  end
-  
-  options '/' do
-    200
-  end
-  
-  before do
-    content_type :json
-    headers \
-      'Access-Control-Allow-Origin'  => '*',
-      'Access-Control-Allow-Methods' => %w{GET POST PUT DELETE}.join(','),
-      'Access-Control-Allow-Headers' => %w{Origin Accept Content-Type X-Requested-With X-CSRF-Token}.join(",")
   end
 end

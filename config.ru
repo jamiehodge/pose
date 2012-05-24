@@ -1,5 +1,9 @@
 require './env'
 
-map '/' do
+map '/assets' do
   run Assets
+end
+
+map '/proxies' do
+  run Proxies
 end

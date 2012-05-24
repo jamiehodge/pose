@@ -37,5 +37,6 @@ require_relative 'lib/storable'
 require_relative 'models/asset'
 require_relative 'models/proxy'
 
+require_relative 'controllers/base'
 require_relative 'controllers/assets'
 require_relative 'controllers/proxies'

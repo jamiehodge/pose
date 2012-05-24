@@ -14,7 +14,7 @@ DB.instance_eval do
       primary_key :id
       String      :filename
       String      :type
-      Integer     :size
+      Integer     :size, default: 0
     end
   end
   
@@ -24,12 +24,13 @@ DB.instance_eval do
       foreign_key :asset_id, :assets, on_delete: :cascade
       String      :filename
       String      :type
-      Integer     :size
+      Integer     :size, default: 0
     end
   end
 end
 
 Sequel::Model.plugin :json_serializer
+Sequel::Model.plugin :defaults_setter
 
 require_relative 'lib/storable'
 

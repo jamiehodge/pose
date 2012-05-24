@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require_relative '../spec_helper'
 
 describe Assets do
   
@@ -45,7 +45,7 @@ describe Assets do
           'assets' => [
             {"asset"=>
               {
-                'id' => 1, 
+                'id' => asset.id, 
                 'filename' => asset.filename, 
                 "type" => asset.type, 
                 "size" => asset.size
@@ -74,8 +74,36 @@ describe Assets do
       end
       
       it 'stores media' do
-        File.file? Asset.first.path
         file.size.must_equal Asset.first.size
+        file.size.must_equal File.size(Asset.first.path)
+      end
+      
+      it 'returns location of asset' do
+        last_response.headers['Location'].must_equal 'http://example.org/1'
+      end
+    end
+    
+    describe 'without tempfile' do
+      
+      before do
+        @attrs = { filename: 'foo.txt', type: 'text/plain', size: 321 }
+        post '/', file: @attrs
+      end
+      
+      after do
+        Asset.destroy
+      end
+      
+      it 'creates asset' do
+        Asset.count.must_equal 1
+      end
+      
+      it 'will not store media' do
+        File.file?(Asset.first.path).must_equal false
+      end
+      
+      it 'will set size' do
+        Asset.first.size.must_equal @attrs[:size]
       end
       
       it 'returns location of asset' do

@@ -11,11 +11,15 @@ module Storable
     File.join dir, filename
   end
   
-  def complete?
-    File.file?(path) && File.size(path) == size
+  def file_size
+    File.file?(path) ? File.size(path) : 0
   end
   
-  def before_save
+  def complete?
+    file_size == size
+  end
+  
+  def before_validation
     self.size ||= tempfile.size if tempfile
     super
   end
@@ -29,6 +33,11 @@ module Storable
   def before_destroy
     FileUtils.rm_rf dir
     super
+  end
+  
+  def validate
+    super
+    errors.add(:tempfile, 'invalid patch') if tempfile && (complete? || tempfile.size + file_size > size)
   end
   
   def append(data)

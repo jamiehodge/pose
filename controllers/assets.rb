@@ -3,8 +3,10 @@ require 'net/http'
 
 class Assets < Base
   
+  disable :protection
+  
   get '/' do
-    Asset.to_json root: true
+    Asset.to_json naked: true
   end
   
   post '/' do
@@ -15,16 +17,9 @@ class Assets < Base
     headers \
       'Location' => url("/#{@asset.id}")
       
-    if @asset.complete?
-      uri = URI 'http://localhost:9292'
-      res = Net::HTTP.post_form uri, 
-        source: url("/#{@asset.id}/media"), 
-        destination: url("/proxies", true, false), 
-        format: 'webm',
-        asset_id: @asset.id
-    end
+    request_proxy if @asset.complete?
       
-    @asset.to_json root: true, include: { size: {}, proxies: { naked: true } }
+    @asset.to_json naked: true, include: { size: {}, proxies: { naked: true } }
   end
   
   before %r{^/(?<id>\d+)} do
@@ -36,20 +31,29 @@ class Assets < Base
   end
   
   get '/:id' do
-    @asset.to_json root: true, include: { size: {}, proxies: { naked: true, except: :asset_id } }
+    @asset.to_json naked: true, include: { size: {}, proxies: { naked: true, except: :asset_id } }
   end
   
   patch '/:id' do
     @asset.set_fields params[:file], [:tempfile]
     @asset.save
+
+    request_proxy if @asset.complete?
     
-    # Stalker.enqueue('asset.image.thumb', id: @asset.id, input: @asset.path) if @asset.complete?
-    
-    @asset.to_json root: true, include: { size: {}, proxies: { naked: true } }
+    @asset.to_json naked: true, include: { size: {}, proxies: { naked: true } }
   end
   
   delete '/:id' do
     @asset.destroy
     201
+  end
+  
+  def request_proxy
+    uri = URI 'http://localhost:9292'
+    res = Net::HTTP.post_form uri, 
+      source: url("/#{@asset.id}/media"), 
+      destination: url("/proxies", true, false), 
+      format: 'webm',
+      asset_id: @asset.id
   end
 end
